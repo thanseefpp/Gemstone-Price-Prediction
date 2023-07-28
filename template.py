@@ -1,14 +1,10 @@
 #----------------------------------------------- IMPORTING DEPENDENCIES ------------------------------------------------#
 import os
 from pathlib import Path
-import logging
 
 #----------------------------------------------- CONFIGURING PROJECT REQ -----------------------------------------------#
 
-logging.basicConfig(level=logging.INFO,format='[%(asctime)s]:%(message)s:')
-
 project_name = "Gemstone"
-
 
 list_of_files = [
     ".github/workflows/.gitkeep",
