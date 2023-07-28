@@ -20,9 +20,9 @@ list_of_files = [
     f"src/{project_name}/pipeline/__init__.py",
     f"src/{project_name}/pipeline/predict_pipeline.py",
     f"src/{project_name}/pipeline/train_pipeline.py",
-    "research/notebooks/train.ipynb"
-    "tests/__init__.py"
-    "tests/data_test.py"
+    "research/notebooks/train.ipynb",
+    "tests/__init__.py",
+    "tests/data_test.py",
     "app.py",
     "Dockerfile",
     "requirements.txt",
@@ -36,10 +36,10 @@ for item in list_of_files:
 
     if file_dir != "":
         os.makedirs(file_dir, exist_ok=True)
-        logging.info(f"Creating directory: {file_dir} for file: {file_name}")
+        print(f"Creating directory: {file_dir} for file: {file_name}")
 
     if not os.path.exists(file_path) or os.path.getsize(file_path) != 0:
         with open(file_path,'w') as f:
-            logging.info(f"Creating an empty file: {file_path})")
+            print(f"Creating an empty file: {file_path})")
     else:
-        logging.info(f"{file_name} is already exists")
+        print(f"{file_name} is already exists")
