@@ -105,8 +105,10 @@ class DataCleaning:
 
     def clean_data_and_transform(self,data: pd.DataFrame):
         """
-        Data cleaning class which preprocesses the data and divides it into train and test data.
-
+        Data cleaning class which preprocesses the data and divides it into train and test data \
+        transform the data using the pipeline, saving the preprocess model and return the train \
+        and test data
+        
         Args:
             data: pd.DataFrame
         """
@@ -141,9 +143,3 @@ class DataCleaning:
             )
         except Exception as e:
             raise CustomException(e,sys) from e
-    
-    
-
-
-
-
