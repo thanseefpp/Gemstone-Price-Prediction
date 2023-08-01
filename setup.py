@@ -43,11 +43,10 @@ if __name__ == "__main__":
         description='Gemstone Price Prediction, Resources Collected From Kaggle',
         author=AUTHOR_USER_NAME,
         author_email='thanseefpp@gmail.com',
-        install_requires=requirements,
         url=f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}",
         project_urls={
             "Bug tracker": f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}/issues",
         },
-        package_dir={"":"src"},
-        packages=find_packages(where="src"),
+        packages=find_packages(),
+        install_requires=requirements,
     )

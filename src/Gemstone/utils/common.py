@@ -4,10 +4,8 @@ import sys
 import pickle
 import numpy as np 
 import pandas as pd
-from src.Gemstone.config.exception import CustomException
-from src.Gemstone.config.logger import logging
-from sklearn.metrics import r2_score
-from sklearn.model_selection import GridSearchCV
+from Gemstone.config.exception import CustomException
+from Gemstone.config.logger import logging
 #----------------------------------------- FUNCTIONS/CLASSES -----------------------------------------#
 
 def load_object(file_path):

@@ -3,17 +3,15 @@ import os
 import sys
 import pandas as pd
 from dataclasses import dataclass
-from src.exception import CustomException
-from src.logger import logging
+from Gemstone.config.exception import CustomException
+from Gemstone.config.logger import logging
 #----------------------------------------- FUNCTIONS/CLASSES ------------------------------------------#
 
 @dataclass
 class DataIngestionConfig:
     """
-        Data ingestion Config class which return three file paths.
+        Data ingestion Config class which return file paths.
     """
-    train_data_path: str = os.path.join('artifacts', "train.csv")
-    test_data_path: str = os.path.join('artifacts', "test.csv")
     raw_data_path: str = os.path.join('artifacts', "data.csv")
 
 class IngestData:
@@ -41,7 +39,7 @@ class IngestData:
         """
         try:
             df = self.get_data()
-            os.makedirs(os.path.dirname(self.ingestion_config.train_data_path), exist_ok=True)
+            os.makedirs(os.path.dirname(self.ingestion_config.raw_data_path), exist_ok=True)
             df.to_csv(self.ingestion_config.raw_data_path,index=False) # saving the data
             return df
         except Exception as e:
