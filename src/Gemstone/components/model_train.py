@@ -21,7 +21,7 @@ from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 from Gemstone.utils.common import save_object
-from Gemstone.utils.common import evaluate_models
+from Gemstone.components.model_evaluation import Evaluation
 # from Gemstone.utils.common import print_evaluated_results
 # from Gemstone.utils.common import model_metrics
 
@@ -36,6 +36,7 @@ class ModelTrainer:
     
     def __init__(self) -> None:
         self.model_trainer_config=ModelTrainerConfig()
+        self.evaluate = Evaluation()
     
     def data_splitter(self, train_array, test_array):
         """
@@ -71,10 +72,9 @@ class ModelTrainer:
     def initiate_model_training(self,train_array,test_array):
         try:
             X_train, X_test, y_train, y_test = self.data_splitter(train_array,test_array)
-            logging.info("Data splitted into X_train, X_test, y_train, y_test")
+            logging.info("Data splitted into X_train, X_test, y_train, y_test and started Evaluate")
             models = self.get_models()
-            model_report:dict = evaluate_models(X_train,X_test,y_train,y_test,models)
-            print(f"\n{'---'*20}\n{model_report}\n{'---'*20}")
+            model_report:dict = self.evaluate.initiate_model_evaluation(X_train,X_test,y_train,y_test,models)
             
             # To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
@@ -87,7 +87,6 @@ class ModelTrainer:
             if best_model_score < 0.6 :
                 logging.info('model has r2 Score less than 60%')
                 raise CustomException('No Best Model Found',"")
-            print(f"\n{'---'*20}\nBest Model Name :{best_model_name}, R2 Score : {best_model_score}\n{'---'*20}")
             logging.info(f'Best Model Name : {best_model_name} , R2 Score : {best_model_score}')
             return best_model_score
         except Exception as e:
