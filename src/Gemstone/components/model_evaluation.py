@@ -97,16 +97,38 @@ class Evaluation:
     def get_metrics_scores(self,y_true, y_pred) -> float:
         try:
             logging.info("-"*20)
-            self.mean_absolute_error(y_true,y_pred)
-            self.mean_squared_error(y_true,y_pred)
-            self.root_mean_squared_error(y_true,y_pred)
-            return self.r2_score(y_true,y_pred)
+            mae = self.mean_absolute_error(y_true,y_pred)
+            mse = self.mean_squared_error(y_true,y_pred)
+            rmse = self.root_mean_squared_error(y_true,y_pred)
+            R2_score = self.r2_score(y_true,y_pred)
+            return mae,mse,rmse,R2_score
         except Exception as e:
             logging.info("Exited the get_metrics_scores method of the Evaluation class")
             raise CustomException(e,sys) from e
+    
+    def evaluate_single_model(self, X_train, X_test, y_train, y_test,model):
+        try:
+            # Predict Training data
+            ytrain_pred = model.predict(X_train)
+            # Predict Testing data
+            ytest_pred = model.predict(X_test)
+            # Get metrics Train data score
+            train_mae,train_mse,train_rmse,train_R2_score = self.get_metrics_scores(y_train, ytrain_pred)
+            # Get metrics Test data score
+            test_mae,test_mse,test_rmse,test_R2_score = self.get_metrics_scores(y_test,ytest_pred)
+            logging.info("-"*20)
+            logging.info(f"Train Evaluation Scores (mae : {train_mae}), (mse : {train_mse})\
+                (rmse : {train_rmse}), (r2_score : {train_R2_score})")
+            logging.info("-"*20)
+            logging.info(f"Test Evaluation Scores (mae : {test_mae}), (mse : {test_mse})\
+                (rmse : {test_rmse}), (r2_score : {test_R2_score})")
+            return test_mae,test_mse,test_rmse,test_R2_score
+        except Exception as e:
+            logging.info("Exited the evaluate_single_model method of the Evaluation class")
+            raise CustomException(e,sys) from e
         
         
-    def initiate_model_evaluation(self, X_train, X_test, y_train, y_test, models)-> List:
+    def initiate_multi_model_evaluation(self, X_train, X_test, y_train, y_test, models)-> List:
         """
             evaluating the models and return the result
         """
@@ -120,14 +142,14 @@ class Evaluation:
                 y_train_pred = model.predict(X_train)
                 # Predict Testing data
                 y_test_pred =model.predict(X_test)
-                # Get r2 score Train data score
-                train = self.get_metrics_scores(y_train, y_train_pred)
-                # Get r2 score Test data score
-                test_r2_score = self.get_metrics_scores(y_test,y_test_pred)
+                # Get metrics Train data score
+                self.get_metrics_scores(y_train, y_train_pred)
+                # Get metrics Test data score
+                _,_,_,test_R2_score = self.get_metrics_scores(y_test,y_test_pred)
                 logging.info(f"Model Name : {list(models.keys())[i]}")
                 logging.info("-"*20)
                 # appending the the model name as key and the score as value
-                report[list(models.keys())[i]] = test_r2_score
+                report[list(models.keys())[i]] = test_R2_score
             return report
         except Exception as e:
             raise CustomException(e,sys) from e
