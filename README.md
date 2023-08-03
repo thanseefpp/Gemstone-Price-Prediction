@@ -2,6 +2,9 @@
 
 ---
 
+![gemstone_prediction](https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/bf3ddfd6-e5a9-4756-8ba4-8f5dca3a5ce7)
+
+---
 ## Setup Environment
 
 ```
@@ -28,6 +31,12 @@ Before running the pipeline make sure your pc is have at least 8GB Ram for faste
 
 ```
 python3 run_pipeline.py
+```
+
+## 3 - To Run Application
+
+```
+streamlit run app.py
 ```
 
 ## Clean Your Code
