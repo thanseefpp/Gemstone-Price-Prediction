@@ -39,3 +39,9 @@ python3 run_pipeline.py
 ```
 python3 clean_code.py
 ```
+
+- For Pushing this code your repo you have to install git lfs
+
+```
+git lfs install
+```
