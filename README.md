@@ -33,7 +33,7 @@ python3 run_pipeline.py
 ## 3 - To Run Application
 
 ```
-streamlit run app.py
+streamlit run streamlit_app.py
 ```
 
 ## Clean Your Code
