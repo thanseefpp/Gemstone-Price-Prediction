@@ -1,7 +1,3 @@
-<h2 align="center">Gemstone Price Prediction</h2>
-
----
-
 ![gemstone_prediction](https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/bf3ddfd6-e5a9-4756-8ba4-8f5dca3a5ce7)
 
 ---
@@ -49,7 +45,7 @@ streamlit run app.py
 python3 clean_code.py
 ```
 
-- For Pushing this code your repo you have to install git lfs
+- For Pushing this code to your repo you have to install git lfs
 
 ```
 git lfs install
