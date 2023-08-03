@@ -48,29 +48,31 @@ def load_screen_items():
     st.markdown("<h1 style='text-align: center;'>💎 Gemstone Price 💸 Prediction 🥰</h1>",
                     unsafe_allow_html=True)
 
-    col1,col2 = st.columns(2)
+    col1,col2,col3 = st.columns(3)
     gemstone_price = ""
     with col1:
         carat = st.text_input("Carat")
     with col2:
-        depth = st.text_input("Depth")
-    with col1:
-        table = st.text_input("Table")
-    with col2:
-        x = st.text_input("x")
-    with col1:
-        y = st.text_input("y")
-    with col2:
-        z = st.text_input("z")
-    with col1:
         cut = st.selectbox('Cut',
                 ('Fair', 'Good','Very Good','Premium','Ideal'))
-    with col2:
+    with col3:
         color = st.selectbox('Color',
                 ('D', 'E','F','G','H','I','J'))
     with col1:
         clarity = st.selectbox('Clarity',
                 ('I1', 'SI2','SI1','VS2','VS1','VVS2','VVS1','IF'))
+    with col2:
+        depth = st.text_input("Depth")
+    with col3:
+        table = st.text_input("Table")
+    with col1:
+        x = st.text_input("x")
+    with col2:
+        y = st.text_input("y")
+    with col3:
+        z = st.text_input("z")
+    
+    
 
     if st.button("Process"):
         gemstone_price = gemstone_price_prediction(carat, depth, table, x, y, z, cut, color, clarity)
@@ -82,4 +84,4 @@ def load_screen_items():
 if __name__=="__main__":
     load_screen_items()
     # carat ,cut ,color ,clarity, depth, table, x, y, z
-    # 1.11 ,Premium , D , SI1, 60.6, 59.0 , 6.74, 6.68, 4.06
+    # 1.11 ,Premium , D , SI1, 60.6, 59.0 , 6.74, 6.68, 4.06 --> 13619

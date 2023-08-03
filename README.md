@@ -1,4 +1,5 @@
-![gemstone_prediction](https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/bf3ddfd6-e5a9-4756-8ba4-8f5dca3a5ce7)
+![gem](https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/8bdb312a-4da0-4f26-99af-c156c4544060)
+
 
 ---
 ## Setup Environment
