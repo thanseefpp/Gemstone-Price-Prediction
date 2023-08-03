@@ -13,6 +13,7 @@ boot_out.txt
 # website: http://jupyter.org/
 
 catboost_info/
+casestudy/
 
 .ipynb_checkpoints
 */.ipynb_checkpoints/*

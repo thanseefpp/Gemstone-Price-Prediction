@@ -25,10 +25,7 @@ class Evaluation:
             mse: float
         """
         try:
-            logging.info("Entered the mean_squared_error method of the Evaluation class")
-            mse = mean_squared_error(y_true, y_pred)
-            logging.info(f"The mean squared error value is: {mse}")
-            return mse
+            return mean_squared_error(y_true, y_pred)
         except Exception as e:
             logging.info("Exited the mean_squared_error method of the Evaluation class")
             raise CustomException(e,sys) from e
@@ -44,10 +41,7 @@ class Evaluation:
             mae: float
         """
         try:
-            logging.info("Entered the mean_absolute_error method of the Evaluation class")
-            mae = mean_absolute_error(y_true, y_pred)
-            logging.info(f"The mean absolute error value is: {mae}")
-            return mae
+            return mean_absolute_error(y_true, y_pred)
         except Exception as e:
             logging.info("Exited the mean_absolute_error method of the Evaluation class")
             raise CustomException(e,sys) from e
@@ -65,11 +59,7 @@ class Evaluation:
             r2_score: float
         """
         try:
-            logging.info("Entered the r2_score method of the Evaluation class")
-            r2 = r2_score(y_true, y_pred)
-            logging.info(f"The r2 score value is: {r2}")
-            logging.info("Exited the r2_score method of the Evaluation class")
-            return r2
+            return r2_score(y_true, y_pred)
         except Exception as e:
             logging.info("Exited the r2_score method of the Evaluation class")
             raise CustomException(e,sys) from e
@@ -86,17 +76,13 @@ class Evaluation:
             rmse: float
         """
         try:
-            logging.info("Entered the root_mean_squared_error method of the Evaluation class")
-            rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-            logging.info(f"The root mean squared error value is: {rmse}")
-            return rmse
+            return np.sqrt(mean_squared_error(y_true, y_pred))
         except Exception as e:
             logging.info("Exited the root_mean_squared_error method of the Evaluation class")
             raise CustomException(e,sys) from e
     
     def get_metrics_scores(self,y_true, y_pred) -> float:
         try:
-            logging.info("-"*20)
             mae = self.mean_absolute_error(y_true,y_pred)
             mse = self.mean_squared_error(y_true,y_pred)
             rmse = self.root_mean_squared_error(y_true,y_pred)

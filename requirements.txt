@@ -5,9 +5,10 @@ seaborn
 scikit-learn
 ipykernel
 catboost
-xgboost
+xgboost==1.4.2
 dill
 flask
 flask_cors
 lime
+mlflow
 -e .
