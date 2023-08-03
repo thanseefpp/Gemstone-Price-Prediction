@@ -28,7 +28,8 @@ class DataConfig:
 
 class DataCleaning:
     """
-        Data cleaning class which pre processes the data and divides it into train and test data.
+        Data cleaning class which pre processes the data and divides it into \
+        train and test data.
     """
 
     def __init__(self) -> None:
@@ -40,14 +41,16 @@ class DataCleaning:
             This function is responsible for data transformation
         '''
         try:
-            # Define which columns should be ordinal-encoded and which should be scaled
+            # Define which columns should be ordinal-encoded \
+            # and which should be scaled
             categorical_cols = ['cut', 'color', 'clarity']
             numerical_cols = ['carat', 'depth', 'table', 'x', 'y', 'z']
 
             # Define the custom ranking for each ordinal variable
             cut_categories = ['Fair', 'Good', 'Very Good', 'Premium', 'Ideal']
             color_categories = ['D', 'E', 'F', 'G', 'H', 'I', 'J']
-            clarity_categories = ['I1', 'SI2', 'SI1', 'VS2', 'VS1', 'VVS2', 'VVS1', 'IF']
+            clarity_categories = ['I1', 'SI2', 'SI1',
+                                  'VS2', 'VS1', 'VVS2', 'VVS1', 'IF']
 
             # Numerical Pipeline
             num_pipeline = Pipeline(
@@ -61,7 +64,8 @@ class DataCleaning:
             cat_pipeline = Pipeline(
                 steps=[
                     ('imputer', SimpleImputer(strategy='most_frequent')),
-                    ('ordinal_encoder', OrdinalEncoder(categories=[cut_categories, color_categories, clarity_categories])),
+                    ('ordinal_encoder', OrdinalEncoder(categories=[
+                     cut_categories, color_categories, clarity_categories])),
                     ('scaler', StandardScaler())
                 ]
             )
@@ -102,7 +106,8 @@ class DataCleaning:
             )
             train_df.to_csv(self.data_config.train_data_path,
                             index=False, header=True)
-            test_df.to_csv(self.data_config.test_data_path, index=False, header=True)
+            test_df.to_csv(self.data_config.test_data_path,
+                           index=False, header=True)
             return train_df, test_df
         except Exception as e:
             raise CustomException(e, sys) from e
@@ -124,14 +129,18 @@ class DataCleaning:
 
             target_column_name = 'price'
 
-            input_feature_train_df = train_df.drop(columns=target_column_name, axis=1)
+            input_feature_train_df = train_df.drop(
+                columns=target_column_name, axis=1)
             target_feature_train_df = train_df[target_column_name]
 
-            input_feature_test_df = test_df.drop(columns=target_column_name, axis=1)
+            input_feature_test_df = test_df.drop(
+                columns=target_column_name, axis=1)
             target_feature_test_df = test_df[target_column_name]
 
-            input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
-            input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
+            input_feature_train_arr = preprocessing_obj.fit_transform(
+                input_feature_train_df)
+            input_feature_test_arr = preprocessing_obj.transform(
+                input_feature_test_df)
 
             train_arr = np.c_[input_feature_train_arr,
                               np.array(target_feature_train_df)]

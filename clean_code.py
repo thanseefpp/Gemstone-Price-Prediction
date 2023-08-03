@@ -1,5 +1,5 @@
-import glob
 import os
+import subprocess
 
 import autopep8
 import isort
@@ -33,11 +33,17 @@ def remove_unused_imports(file_path):
     isort.file(file_path)
 
 
+def remove_whitespace(file_path):
+    subprocess.run(
+        ['flake8', '--ignore=E501', file_path])
+
+
 def code_cleaner(file_path):
     try:
         clean_indentation(file_path)
         remove_unused_variables(file_path)
         remove_unused_imports(file_path)
+        remove_whitespace(file_path)
         print("Code cleaning is successful!")
     except Exception as e:
         print(f"Error during code cleaning: {e}")

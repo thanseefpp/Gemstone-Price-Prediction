@@ -41,7 +41,7 @@ if __name__ == "__main__":
     setup(
         name=SRC_REPO,
         version=getVersion(),
-        description='Gemstone Price Prediction, Resources Collected From Kaggle',
+        description='Gemstone Price Prediction',
         author=AUTHOR_USER_NAME,
         author_email='thanseefpp@gmail.com',
         url=f"https://github.com/{AUTHOR_USER_NAME}/{REPO_NAME}",

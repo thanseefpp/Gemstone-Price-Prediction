@@ -105,13 +105,15 @@ class Evaluation:
             # Predict Testing data
             ytest_pred = model.predict(X_test)
             # Get metrics Train data score
-            train_mae, train_mse, train_rmse, train_R2_score = self.get_metrics_scores(y_train, ytrain_pred)
+            train_mae, train_mse, train_rmse, train_R2_score = self.get_metrics_scores(
+                y_train, ytrain_pred)
             # Get metrics Test data score
-            test_mae, test_mse, test_rmse, test_R2_score = self.get_metrics_scores(y_test, ytest_pred)
-            logging.info("-"*20)
+            test_mae, test_mse, test_rmse, test_R2_score = self.get_metrics_scores(
+                y_test, ytest_pred)
+            logging.info("-" * 20)
             logging.info(f"Train Evaluation Scores (mae : {train_mae}), (mse : {train_mse})\
                 (rmse : {train_rmse}), (r2_score : {train_R2_score})")
-            logging.info("-"*20)
+            logging.info("-" * 20)
             logging.info(f"Test Evaluation Scores (mae : {test_mae}), (mse : {test_mse})\
                 (rmse : {test_rmse}), (r2_score : {test_R2_score})")
             return test_mae, test_mse, test_rmse, test_R2_score
@@ -120,7 +122,7 @@ class Evaluation:
                 "Exited the evaluate_single_model method of the Evaluation class")
             raise CustomException(e, sys) from e
 
-    def initiate_multi_model_evaluation(self, X_train, X_test, y_train, y_test, models)-> List:
+    def initiate_multi_model_evaluation(self, X_train, X_test, y_train, y_test, models) -> List:
         """
             evaluating the models and return the result
         """
@@ -137,9 +139,10 @@ class Evaluation:
                 # Get metrics Train data score
                 self.get_metrics_scores(y_train, y_train_pred)
                 # Get metrics Test data score
-                _, _, _, test_R2_score = self.get_metrics_scores(y_test, y_test_pred)
+                _, _, _, test_R2_score = self.get_metrics_scores(
+                    y_test, y_test_pred)
                 logging.info(f"Model Name : {list(models.keys())[i]}")
-                logging.info("-"*20)
+                logging.info("-" * 20)
                 # appending the the model name as key and the score as value
                 report[list(models.keys())[i]] = test_R2_score
             return report

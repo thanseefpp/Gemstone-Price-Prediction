@@ -3,10 +3,6 @@ import os
 import pickle
 import sys
 
-import numpy as np
-import pandas as pd
-from sklearn.metrics import r2_score
-
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 
