@@ -1,12 +1,9 @@
-# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
 import os
 import pickle
 import sys
 
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
-
-# ----------------------------------------- FUNCTIONS/CLASSES -----------------------------------------#
 
 
 def load_object(file_path):

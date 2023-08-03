@@ -1,4 +1,4 @@
-# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
+
 import os
 import sys
 from dataclasses import dataclass
@@ -7,8 +7,6 @@ import pandas as pd
 
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
-
-# ----------------------------------------- FUNCTIONS/CLASSES ------------------------------------------#
 
 
 @dataclass

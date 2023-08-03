@@ -1,4 +1,4 @@
-# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
+
 import os
 import sys
 from dataclasses import dataclass
@@ -15,8 +15,6 @@ from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 from Gemstone.utils.common import save_object
-
-# ----------------------------------------- FUNCTIONS/CLASSES -----------------------------------------#
 
 
 @dataclass

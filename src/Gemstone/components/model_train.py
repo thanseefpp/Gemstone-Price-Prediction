@@ -1,4 +1,4 @@
-# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
+
 # Basic Import
 import os
 import sys
@@ -18,8 +18,6 @@ from Gemstone.components.model_evaluation import Evaluation
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 from Gemstone.utils.common import save_object
-
-# ------------------------------------------- FUNCTIONS/CLASSES -------------------------------------------#
 
 
 class Hyperparameter_Optimization:
