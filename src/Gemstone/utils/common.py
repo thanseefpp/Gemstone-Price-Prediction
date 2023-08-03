@@ -1,13 +1,17 @@
-#----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
+# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
 import os
-import sys
 import pickle
-import numpy as np 
+import sys
+
+import numpy as np
 import pandas as pd
+from sklearn.metrics import r2_score
+
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
-from sklearn.metrics import r2_score
-#----------------------------------------- FUNCTIONS/CLASSES -----------------------------------------#
+
+# ----------------------------------------- FUNCTIONS/CLASSES -----------------------------------------#
+
 
 def load_object(file_path):
     """

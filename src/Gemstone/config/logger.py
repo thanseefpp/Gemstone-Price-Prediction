@@ -1,8 +1,7 @@
-from datetime import datetime
+import logging
 import os
 import sys
-import logging
-
+from datetime import datetime
 
 logging_format = "[%(asctime)s: %(lineno)d : %(name)s : %(levelname)s : %(module)s : %(message)s]"
 LOG_FILE = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"

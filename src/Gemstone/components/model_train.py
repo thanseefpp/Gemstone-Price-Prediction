@@ -1,43 +1,44 @@
-#----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
+# ----------------------------------------- IMPORTING DEPENDENCIES -------------------------------------#
 # Basic Import
-import sys
 import os
-import numpy as np
-import pandas as pd
+import sys
 from dataclasses import dataclass
-import optuna
 
+import numpy as np
+import optuna
+import pandas as pd
+from catboost import CatBoostRegressor
+from sklearn.ensemble import (AdaBoostRegressor, GradientBoostingRegressor,
+                              RandomForestRegressor, VotingRegressor)
+from sklearn.linear_model import Lasso, LinearRegression, Ridge
+from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 # Modelling
 from sklearn.neighbors import KNeighborsRegressor
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import RandomForestRegressor,AdaBoostRegressor, GradientBoostingRegressor
 from sklearn.svm import SVR
-from sklearn.linear_model import LinearRegression, Ridge,Lasso
-from sklearn.model_selection import RandomizedSearchCV, GridSearchCV
-from catboost import CatBoostRegressor
+from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
-from sklearn.ensemble import VotingRegressor
-from sklearn.metrics import mean_squared_error
 
-
+from Gemstone.components.model_evaluation import Evaluation
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 from Gemstone.utils.common import save_object
-from Gemstone.components.model_evaluation import Evaluation
 
-#------------------------------------------- FUNCTIONS/CLASSES -------------------------------------------#
+# ------------------------------------------- FUNCTIONS/CLASSES -------------------------------------------#
+
 
 class Hyperparameter_Optimization:
     """
     Class for doing hyperparameter optimization.
     """
+
     def __init__(
         self,
         x_train,
         y_train,
         x_test,
         y_test,
-        ) -> None:
+    ) -> None:
         """
         Initialize the class with the training and test data.
         Evaluation Class    
@@ -66,15 +67,15 @@ class Hyperparameter_Optimization:
                 "verbose": 0,
             }
             model = CatBoostRegressor(**params, random_state=42)
-            model.fit(self.x_train, self.y_train, eval_set=[(self.x_test, self.y_test)], early_stopping_rounds=50,verbose=100)
+            model.fit(self.x_train, self.y_train, eval_set=[(self.x_test, self.y_test)], early_stopping_rounds=50, verbose=100)
             y_pred = model.predict(self.x_test)
-            mae,mse,rmse,R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
+            _, _, rmse, R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
             print(f"r2_score : {R2_score}")
             return rmse
         except Exception as e:
             logging.info("Exited the optimize_catboost method of the Hyperparameter_Optimization class")
             raise CustomException(e, sys) from e
-        
+
     def optimize_xgb(self, trial: optuna.Trial) -> float:
         try:
             """
@@ -95,16 +96,16 @@ class Hyperparameter_Optimization:
                 "random_state": 42,
             }
             model = XGBRegressor(**params)
-            model.fit(self.x_train, self.y_train, eval_set=[(self.x_test, self.y_test)],early_stopping_rounds=50,verbose=100)
+            model.fit(self.x_train, self.y_train, eval_set=[(self.x_test, self.y_test)], early_stopping_rounds=50, verbose=100)
             y_pred = model.predict(self.x_test)
-            mae,mse,rmse,R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
+            _, _, rmse, R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
             print(f"r2_score : {R2_score}")
             return rmse
         except Exception as e:
             logging.info("Exited the optimize_xgb method of the Hyperparameter_Optimization class")
             raise CustomException(e, sys) from e
 
-    def optimize_knn(self,trial: optuna.Trial) -> float:
+    def optimize_knn(self, trial: optuna.Trial) -> float:
         try:
             params = {
                 "n_neighbors": trial.suggest_int("n_neighbors", 1, 30),
@@ -114,39 +115,40 @@ class Hyperparameter_Optimization:
             model = KNeighborsRegressor(**params)
             model.fit(self.x_train, self.y_train)
             y_pred = model.predict(self.x_test)
-            mae,mse,rmse,R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
+            _, _, rmse, R2_score = self.evaluate.get_metrics_scores(self.y_test, y_pred)
             print(f"r2_score : {R2_score}")
             return rmse
         except Exception as e:
             logging.info("Exited the optimize_knn method of the Hyperparameter_Optimization class")
             raise CustomException(e, sys) from e
 
+
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_path = os.path.join("artifacts",'model.pkl')
-    
+    trained_model_file_path = os.path.join("artifacts", 'model.pkl')
+
 
 class ModelTrainer:
-    
+
     def __init__(self) -> None:
-        self.model_trainer_config=ModelTrainerConfig()
+        self.model_trainer_config = ModelTrainerConfig()
         self.evaluate = Evaluation()
-    
+
     def data_splitter(self, train_array, test_array):
         """
             It split the train,test data into X_train, X_test, y_train, y_test.
         """
         try:
             return (
-                train_array[:,:-1],
-                test_array[:,:-1],
-                train_array[:,-1],
-                test_array[:,-1]
-            ) 
+                train_array[:, :-1],
+                test_array[:, :-1],
+                train_array[:, -1],
+                test_array[:, -1]
+            )
         except Exception as e:
             logging.info("Exited the data_splitter method of the ModelTrainer class")
             raise CustomException(e, sys) from e
-        
+
     def get_models(self):
         try:
             return {
@@ -156,16 +158,16 @@ class ModelTrainer:
                 "K-Neighbors Regressor": KNeighborsRegressor(),
                 "Decision Tree": DecisionTreeRegressor(),
                 "Random Forest Regressor": RandomForestRegressor(),
-                "XGBRegressor": XGBRegressor(), 
+                "XGBRegressor": XGBRegressor(),
                 "CatBoosting Regressor": CatBoostRegressor(verbose=False),
-                "GradientBoosting Regressor":GradientBoostingRegressor(),
+                "GradientBoosting Regressor": GradientBoostingRegressor(),
                 "AdaBoost Regressor": AdaBoostRegressor()
-            } 
+            }
         except Exception as e:
             logging.info("Exited the get_models method of the ModelTrainer class")
             raise CustomException(e, sys) from e
-    
-    def catboost_trainer(self,X_train,y_train,X_test,y_test,fine_tuning: bool = True):
+
+    def catboost_trainer(self, X_train, y_train, X_test, y_test, fine_tuning: bool = True):
         """
             It trains the CatBoostRegressor model.
             Args:
@@ -177,7 +179,7 @@ class ModelTrainer:
         try:
             if fine_tuning:
                 hyper_opt = Hyperparameter_Optimization(
-                    x_train=X_train,y_train=y_train,x_test=X_test,y_test=y_test
+                    x_train=X_train, y_train=y_train, x_test=X_test, y_test=y_test
                 )
                 study = optuna.create_study(direction="minimize")
                 study.optimize(hyper_opt.optimize_catboost, n_trials=100)
@@ -188,13 +190,13 @@ class ModelTrainer:
                 model = CatBoostRegressor(**best_params, random_state=42)
             else:
                 model = CatBoostRegressor()
-            model.fit(X_train, y_train, eval_set=[(X_test, y_test)], early_stopping_rounds=50,verbose=100)
+            model.fit(X_train, y_train, eval_set=[(X_test, y_test)], early_stopping_rounds=50, verbose=100)
             return model
         except Exception as e:
             logging.info("Exited the catboost_trainer method of the ModelTrainer class")
             raise CustomException(e, sys) from e
-        
-    def xgb_trainer(self,X_train,y_train,X_test,y_test,fine_tuning: bool = True):
+
+    def xgb_trainer(self, X_train, y_train, X_test, y_test, fine_tuning: bool = True):
         """
             It trains the XGBRegressor model.
             Args:
@@ -206,7 +208,7 @@ class ModelTrainer:
         try:
             if fine_tuning:
                 hyper_opt = Hyperparameter_Optimization(
-                    x_train=X_train,y_train=y_train,x_test=X_test,y_test=y_test
+                    x_train=X_train, y_train=y_train, x_test=X_test, y_test=y_test
                 )
                 study = optuna.create_study(direction="minimize")
                 study.optimize(hyper_opt.optimize_xgb, n_trials=100)
@@ -217,13 +219,13 @@ class ModelTrainer:
                 model = XGBRegressor(**best_params)
             else:
                 model = XGBRegressor()
-            model.fit(X_train, y_train, eval_set=[(X_test, y_test)],early_stopping_rounds=50,verbose=100)
+            model.fit(X_train, y_train, eval_set=[(X_test, y_test)], early_stopping_rounds=50, verbose=100)
             return model
         except Exception as e:
             logging.info("Exited the xgb_trainer method of the ModelTrainer class")
             raise CustomException(e, sys) from e
-    
-    def knn_trainer(self,X_train,y_train,X_test,y_test,fine_tuning: bool = True):
+
+    def knn_trainer(self, X_train, y_train, X_test, y_test, fine_tuning: bool = True):
         """
         It trains the KNeighborsRegressor model.
         Args:
@@ -235,7 +237,7 @@ class ModelTrainer:
         try:
             if fine_tuning:
                 hyper_opt = Hyperparameter_Optimization(
-                    x_train=X_train,y_train=y_train,x_test=X_test,y_test=y_test
+                    x_train=X_train, y_train=y_train, x_test=X_test, y_test=y_test
                 )
                 study = optuna.create_study(direction="minimize")
                 study.optimize(hyper_opt.optimize_knn, n_trials=100)
@@ -251,47 +253,47 @@ class ModelTrainer:
         except Exception as e:
             logging.info("Exited the knn_trainer method of the ModelTrainer class")
             raise CustomException(e, sys) from e
-        
-    def initiate_model_training(self,train_array,test_array):
+
+    def initiate_model_training(self, train_array, test_array):
         try:
-            X_train, X_test, y_train, y_test = self.data_splitter(train_array,test_array)
+            X_train, X_test, y_train, y_test = self.data_splitter(train_array, test_array)
             logging.info("Data splitted into X_train, X_test, y_train, y_test and started Evaluate")
             models = self.get_models()
-            model_report:dict = self.evaluate.initiate_multi_model_evaluation(X_train,X_test,y_train,y_test,models)
+            model_report: dict = self.evaluate.initiate_multi_model_evaluation(X_train, X_test, y_train, y_test, models)
             # To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
             # To get best model name from dict
             best_model_name = list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)
             ]
-            best_model = models[best_model_name]
-            if best_model_score < 0.6 :
+            _ = models[best_model_name]
+            if best_model_score < 0.6:
                 logging.info('model has r2 Score less than 60%')
-                raise CustomException('No Best Model Found',"")
+                raise CustomException('No Best Model Found', "")
             logging.info(f'Best Model Name : {best_model_name} , R2 Score : {best_model_score}')
             print(f"\nBefore Hyper Tune Best Model : {best_model_name}\n")
             fine_tuning = True
             logging.info("Fine Tuning Started...........")
-            best_xgb_model = self.xgb_trainer(X_train,y_train,X_test,y_test,fine_tuning)
-            best_cbr_model = self.catboost_trainer(X_train,y_train,X_test,y_test,fine_tuning)
-            best_knn_model = self.knn_trainer(X_train,y_train,X_test,y_test,fine_tuning)
+            best_xgb_model = self.xgb_trainer(X_train, y_train, X_test, y_test, fine_tuning)
+            best_cbr_model = self.catboost_trainer(X_train, y_train, X_test, y_test, fine_tuning)
+            best_knn_model = self.knn_trainer(X_train, y_train, X_test, y_test, fine_tuning)
             logging.info("Fine Tuning Completed...........")
             logging.info('Voting Regressor model training started')
             # Creating final Voting regressor
-            ensemble_reg = VotingRegressor([('cbr',best_cbr_model),('xgb',best_xgb_model),('knn',best_knn_model)], weights=[3,2,1])
+            ensemble_reg = VotingRegressor([('cbr', best_cbr_model), ('xgb', best_xgb_model), ('knn', best_knn_model)], weights=[3, 2, 1])
             ensemble_reg.fit(X_train, y_train)
             logging.info("-"*20)
-            mae,mse,rmse,R2_score = self.evaluate.evaluate_single_model(X_train,X_test,y_train,y_test,ensemble_reg)
+            mae, mse, rmse, R2_score = self.evaluate.evaluate_single_model(X_train, X_test, y_train, y_test, ensemble_reg)
             logging.info(f"\nmae :{mae},\nmse :{mse},\
                 \nrmse :{rmse},\nR2_score :{R2_score}")
             logging.info('Voting Regressor Training Completed')
             # saving the best model
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
-                obj = ensemble_reg
+                obj=ensemble_reg
             )
             logging.info('Best Model pickled file saved Successful')
-            return mae,mse,rmse,R2_score
+            return mae, mse, rmse, R2_score
         except Exception as e:
             logging.info("Exited the initiate_model_training method of the ModelTrainer class")
             raise CustomException(e, sys) from e

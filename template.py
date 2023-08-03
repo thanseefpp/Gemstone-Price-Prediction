@@ -1,8 +1,8 @@
-#----------------------------------------------- IMPORTING DEPENDENCIES ------------------------------------------------#
+# ----------------------------------------------- IMPORTING DEPENDENCIES ------------------------------------------------#
 import os
 from pathlib import Path
 
-#----------------------------------------------- CONFIGURING PROJECT REQ -----------------------------------------------#
+# ----------------------------------------------- CONFIGURING PROJECT REQ -----------------------------------------------#
 
 project_name = "Gemstone"
 
@@ -39,7 +39,7 @@ for item in list_of_files:
         print(f"Creating directory: {file_dir} for file: {file_name}")
 
     if not os.path.exists(file_path) or os.path.getsize(file_path) != 0:
-        with open(file_path,'w') as f:
+        with open(file_path, 'w') as f:
             print(f"Creating an empty file: {file_path})")
     else:
         print(f"{file_name} is already exists")
