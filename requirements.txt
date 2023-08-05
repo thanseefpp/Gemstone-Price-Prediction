@@ -19,6 +19,7 @@ SQLAlchemy==1.4.41
 sqlmodel==0.0.8
 streamlit==1.25.0
 fastapi
+fastapi-utils
 uvicorn
 httpx
 -e .

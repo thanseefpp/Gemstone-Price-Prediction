@@ -65,7 +65,7 @@ async def get_all_gemstones():
             return await gemstone_dal.get_all_gemstone_data()
 
 
-@router.put("/gemstones/{gemstones_id}")
+@router.put("/gemstones/{gemstone_id}")
 async def update_gemstone(
     gemstone_id: int, carat: Optional[float] = None, depth: Optional[float] = None, table: Optional[float] = None,
     cut: Optional[str] = None, color: Optional[str] = None, clarity: Optional[str] = None,
@@ -74,6 +74,16 @@ async def update_gemstone(
     async with async_session() as session:
         async with session.begin():
             gemstone_dal = GemstoneDAL(session)
-            return await gemstone_dal.update_gemstone_db(
+            await gemstone_dal.update_gemstone_db(
                 gemstone_id, carat, depth, table, cut, color, clarity,
                 x, y, z, price)
+            return {f"Item Updated with {gemstone_id}"}
+
+
+@router.delete("/gemstones_drop/{gemstone_id}")
+async def dropt_gemstone_item(gemstone_id: int):
+    async with async_session() as session:
+        async with session.begin():
+            gemstone_dal = GemstoneDAL(session)
+            await gemstone_dal.drop_gemstone_table_item(gemstone_id)
+            return {"item deleted successful"}

@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from sqlalchemy import update
+from sqlalchemy import update,delete
 from sqlalchemy.future import select
 from sqlalchemy.orm import Session
 
@@ -64,5 +64,11 @@ class GemstoneDAL():
             q = q.values(z=z)
         if price:
             q = q.values(price=price)
+        q.execution_options(synchronize_session="fetch")
+        await self.db_session.execute(q)
+        
+    async def drop_gemstone_table_item(self,
+                                 gemstone_id: int):
+        q = delete(GemstoneModel).where(GemstoneModel.id == gemstone_id)
         q.execution_options(synchronize_session="fetch")
         await self.db_session.execute(q)

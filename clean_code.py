@@ -9,9 +9,9 @@ import pylint.lint
 def find_python_files(location):
     python_files = []
     for root, _, files in os.walk(location):
-        for file in files:
-            if file.endswith('.py'):
-                python_files.append(os.path.join(root, file))
+        python_files.extend(
+            os.path.join(root, file) for file in files if file.endswith('.py')
+        )
     return python_files
 
 
@@ -51,8 +51,7 @@ def code_cleaner(file_path):
 
 if __name__ == "__main__":
     current_working_directory = os.getcwd()
-    python_files = find_python_files(current_working_directory)
-    if python_files:
+    if python_files := find_python_files(current_working_directory):
         print("Python files found in subfolders:")
         for file in python_files:
             code_cleaner(file)
