@@ -2,9 +2,9 @@
 def train_pipeline(ingest_data, clean_data, model_train):
     """
     Args:
-        ingest_data: DataClass
-        clean_data: DataClass
-        model_train: DataClass
+        ingest_data: Class
+        clean_data: Class
+        model_train: Class
     Returns:
         mae: float,
         mse: float,
