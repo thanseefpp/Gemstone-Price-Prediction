@@ -1,14 +1,18 @@
-from Gemstone.components.data_cleaning import DataCleaning
-from Gemstone.components.data_ingestion import IngestData
-from Gemstone.components.model_train import ModelTrainer
-from Gemstone.config.logger import logging
 
-
-def train_pipeline():
-    obj = IngestData()
-    data = obj.initiate_ingest_data()
-    clean_obj = DataCleaning()
-    train_arr, test_arr, _ = clean_obj.clean_data_and_transform(data=data)
-    trainer = ModelTrainer()
-    _ = trainer.initiate_model_training(train_arr, test_arr)
-    logging.info('training Completed')
+def train_pipeline(ingest_data, clean_data, model_train):
+    """
+    Args:
+        ingest_data: DataClass
+        clean_data: DataClass
+        model_train: DataClass
+    Returns:
+        mae: float,
+        mse: float,
+        rmse: float,
+        r2_score : float
+    """
+    data = ingest_data.initiate_ingest_data()
+    train_arr, test_arr, _ = clean_data.clean_data_and_transform(data=data)
+    mae, mse, rmse, r2_score = model_train.initiate_model_training(
+        train_arr, test_arr)
+    return mae, mse, rmse, r2_score
