@@ -298,19 +298,13 @@ class ModelTrainer:
             ensemble_reg = VotingRegressor(
                 [('cbr', best_cbr_model), ('xgb', best_xgb_model), ('knn', best_knn_model)], weights=[3, 2, 1])
             ensemble_reg.fit(X_train, y_train)
-            logging.info("-" * 20)
-            mae, mse, rmse, R2_score = self.evaluate.evaluate_single_model(
-                X_train, X_test, y_train, y_test, ensemble_reg)
-            logging.info(f"\nmae :{mae},\nmse :{mse},\
-                \nrmse :{rmse},\nR2_score :{R2_score}")
-            logging.info('Voting Regressor Training Completed')
             # saving the best model
             save_object(
                 file_path=self.model_trainer_config.trained_model_file_path,
                 obj=ensemble_reg
             )
             logging.info('Best Model pickled file saved Successful')
-            return mae, mse, rmse, R2_score
+            return X_train, X_test, y_train, y_test, ensemble_reg
         except Exception as e:
             logging.info(
                 "Exited the initiate_model_training method of the ModelTrainer class")

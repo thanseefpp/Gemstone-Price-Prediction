@@ -69,4 +69,4 @@ class CustomData:
         except Exception as e:
             logging.info(
                 'Exited the get_data_as_data_frame method of the CustomData class')
-            raise CustomException(e, sys)
+            raise CustomException(e, sys) from e
