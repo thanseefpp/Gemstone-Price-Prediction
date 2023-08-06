@@ -1,3 +1,9 @@
+<img width="1440" alt="Screenshot 2023-08-06 at 6 03 30 PM" src="https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/8ff4ef58-0772-4984-a4bc-05471c4019cb">
+
+---
+<h3 align="center">Gemstone Working Demo Streamlit</h3>
+---
+
 ![gem](https://github.com/thanseefpp/Gemstone-Price-Prediction/assets/62167887/8bdb312a-4da0-4f26-99af-c156c4544060)
 
 
