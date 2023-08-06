@@ -1,9 +1,11 @@
+from pathlib import Path
+
 import uvicorn
 from fastapi import FastAPI
-from modules.gemstone_router import router
 from fastapi.middleware.cors import CORSMiddleware
-from modules.database import engine,Base
-from pathlib import Path
+
+from modules.database import Base, engine
+from modules.gemstone_router import router
 
 Base.metadata.create_all(bind=engine)
 
@@ -28,8 +30,9 @@ app.include_router(router, tags=['Gemstone'], prefix='/api/gemstone')
 @app.get("/")
 def root():
     return {
-        "message": "Welcome to Gemstone Prediction API's", 'info' : "for more information visit /docs"}
+        "message": "Welcome to Gemstone Prediction API's", 'info': "for more information visit /docs"}
 
 
 if __name__ == '__main__':
-    uvicorn.run(f"{Path(__file__).stem}:app", host="127.0.0.1", port=8888, reload=True)
+    uvicorn.run(f"{Path(__file__).stem}:app",
+                host="127.0.0.1", port=8888, reload=True)

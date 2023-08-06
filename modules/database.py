@@ -1,8 +1,9 @@
+from fastapi_utils.guid_type import setup_guids_postgresql
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+
 from .config import settings
-from fastapi_utils.guid_type import setup_guids_postgresql
 
 POSTGRES_URL = f"postgresql://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_HOSTNAME}:{settings.DATABASE_PORT}/{settings.POSTGRES_DB}"
 
@@ -21,4 +22,3 @@ def get_db():
         yield db
     finally:
         db.close()
-

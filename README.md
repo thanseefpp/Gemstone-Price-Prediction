@@ -36,6 +36,30 @@ python3 run_pipeline.py
 streamlit run streamlit_app.py
 ```
 
+## 4 - You can also use FASTAPI
+Before Using the FastAPI
+
+1 - You have to Install Docker on your machine
+2 - before running any codes you have to make sure you created .env and done the setup
+```
+DATABASE_PORT=PORT_NUMBER
+POSTGRES_PASSWORD=PASSWORD
+POSTGRES_USER=USER_NAME
+POSTGRES_DB=NAME_FOR_DB
+POSTGRES_HOST=HOST_NAME
+POSTGRES_HOSTNAME=HOST_ADDRESS
+```
+3 - Execute this command to start docker image for postgresql
+
+```
+docker-compose up -d
+```
+4 - Run the app.py File to get the api's
+
+```
+uvicorn app:app --reload
+```
+
 ## Clean Your Code
 
 <p>

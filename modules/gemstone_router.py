@@ -1,14 +1,15 @@
 import sys
-from .schemas import GemstoneBaseSchema
-from .models import GemstoneModel
+
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from sqlalchemy.orm import Session
-from fastapi import Depends, HTTPException, status, APIRouter, Response
+
 from Gemstone.config.exception import CustomException
 from Gemstone.config.logger import logging
 from Gemstone.pipeline.predict_pipeline import CustomData, PredictPipeline
-from .database import get_db
-from sqlalchemy import select
 
+from .database import get_db
+from .models import GemstoneModel
+from .schemas import GemstoneBaseSchema
 
 router = APIRouter()
 
@@ -41,6 +42,7 @@ def get_all_gemstones(db: Session = Depends(get_db)):
     gemstones = db.query(GemstoneModel).all()
     return {'status': 'success', 'results': len(gemstones), 'gemstones': gemstones}
 
+
 @router.post('/', status_code=status.HTTP_201_CREATED)
 async def create_gemstone(payload: GemstoneBaseSchema, db: Session = Depends(get_db)):
     carat = payload.dict()['carat']
@@ -71,6 +73,7 @@ async def create_gemstone(payload: GemstoneBaseSchema, db: Session = Depends(get
     db.refresh(new_gemstone)
     return {"status": "success", "note": new_gemstone}
 
+
 @router.patch('/{gemstoneId}')
 def update_gemstone(gemstoneId: str, payload: GemstoneBaseSchema, db: Session = Depends(get_db)):
     gem_query = db.query(GemstoneModel).filter(GemstoneModel.id == gemstoneId)
@@ -81,10 +84,11 @@ def update_gemstone(gemstoneId: str, payload: GemstoneBaseSchema, db: Session = 
                             detail=f'No gemstone with this id: {gemstoneId} not found')
     update_data = payload.dict(exclude_unset=True)
     gem_query.filter(GemstoneModel.id == gemstoneId).update(update_data,
-                                                       synchronize_session=False)
+                                                            synchronize_session=False)
     db.commit()
     db.refresh(db_gem)
     return {"status": "success", "gemstone": db_gem}
+
 
 @router.get('/{gemstoneId}')
 def get_item(gemstoneId: str, db: Session = Depends(get_db)):
@@ -93,7 +97,8 @@ def get_item(gemstoneId: str, db: Session = Depends(get_db)):
     else:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
                             detail=f"No gemstone with this id: {id} not found")
-        
+
+
 @router.delete('/{gemstoneId}')
 def delete_item(gemstoneId: str, db: Session = Depends(get_db)):
     gem_query = db.query(GemstoneModel).filter(GemstoneModel.id == gemstoneId)
@@ -103,4 +108,4 @@ def delete_item(gemstoneId: str, db: Session = Depends(get_db)):
                             detail=f'No gemstone with this id: {gemstoneId} not found')
     gem_query.delete(synchronize_session=False)
     db.commit()
-    return Response(content=f"Item Deleted Successful {gemstoneId}",status_code=status.HTTP_204_NO_CONTENT)
+    return Response(content=f"Item Deleted Successful {gemstoneId}", status_code=status.HTTP_204_NO_CONTENT)
