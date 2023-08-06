@@ -1,13 +1,17 @@
 import uvicorn
 from fastapi import FastAPI
+from modules.gemstone_router import router
 from fastapi.middleware.cors import CORSMiddleware
+from modules.database import engine,Base
+from pathlib import Path
 
-from db.config import Base, engine
-from router.gemstone_router import router
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
-app.include_router(router)
-origins = ["*"]
+# "http://localhost:8000",
+origins = [
+    "*"
+]
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,16 +21,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# You can comment this function if don't want to create the db when even it start
-# only comment if you have have the db mentioned in config section with same location
+
+app.include_router(router, tags=['Gemstone'], prefix='/api/gemstone')
 
 
-@app.on_event("startup")
-async def startup():
-    # create db tables
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.drop_all)
-        await conn.run_sync(Base.metadata.create_all)
+@app.get("/")
+def root():
+    return {
+        "message": "Welcome to Gemstone Prediction API's", 'info' : "for more information visit /docs"}
+
 
 if __name__ == '__main__':
-    uvicorn.run("app:app", port=5100, host='127.0.0.1')
+    uvicorn.run(f"{Path(__file__).stem}:app", host="127.0.0.1", port=8888, reload=True)
